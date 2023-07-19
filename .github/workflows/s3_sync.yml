@@ -1,0 +1,32 @@
+name: 'S3 Sync'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  s3-sync:
+    name: Sync assets to S3
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: ./iam_access_credentials
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Sync to S3
+        uses: ./s3_sync
+        with:
+          local-path: s3_sync/dist
+          bucket-name: ${{ secrets.S3_BUCKET_NAME }}
+          path-prefix: my/new/prefix
+          args: --delete

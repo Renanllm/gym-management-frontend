@@ -1,0 +1,32 @@
+name: awscli
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  awscli:
+    name: Execute some awscli invocations
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: ./iam_access_credentials
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: List us-east-1 DHCP option set values w/ default json output
+        uses: ./awscli
+        with:
+          cli-command: ec2
+          cli-subcommand: describe-dhcp-options
+          cli-parameters: --query DhcpOptions[0].DhcpConfigurations[*].Values[0].Value
+          aws-region: us-east-1
