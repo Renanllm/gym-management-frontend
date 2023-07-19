@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { client } from './client/axios'
 
 function App() {
@@ -16,6 +17,13 @@ function App() {
       <button className="bg-indigo-500 p-2 rounded-sm" onClick={handleClick}>
         Call API
       </button>
+
+      <Link className="text-white" to="/about">
+        Go to about page
+      </Link>
+      <Link className="text-white" to="/logout">
+        Go to logout page
+      </Link>
     </div>
   )
 }
