@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { StudentsList } from './components/StudentsList'
+import { RouterProvider } from 'react-router'
+import { Background } from './components/Background'
+import { router } from './router'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +15,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <StudentsList />
+      <Background>
+        <RouterProvider router={router} />
+      </Background>
     </QueryClientProvider>
   )
 }
